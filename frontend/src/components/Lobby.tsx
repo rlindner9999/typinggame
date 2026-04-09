@@ -22,10 +22,14 @@ export function Lobby() {
   }, [players]);
 
   const readyCount = players.filter((p) => p.ready).length;
+  const threshold = Math.max(2, Math.ceil(players.length * 2 / 3));
+  const needed = threshold - readyCount;
+
 
   const hint = readyCount >= 1
     ? `${readyCount}/${players.length} ready — countdown starting!`
     : 'Ready up to start the race';
+
 
   const isCountingDown = countdownValue !== null && countdownValue > 0;
 

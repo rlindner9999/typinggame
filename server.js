@@ -183,6 +183,9 @@ async function onChainCancelGame(gameId) {
 function checkCountdown() {
   if (gameState !== 'waiting') return;
   const readyCount = [...players.values()].filter(p => p.ready).length;
+  const totalCount = players.size;
+  const threshold = Math.ceil(totalCount * 2 / 3);
+
 
   if (readyCount >= 1 && !countdownTimer) {
     countdownValue = 5;
@@ -197,7 +200,9 @@ function checkCountdown() {
         broadcast({ type: 'countdown', count: countdownValue });
       }
     }, 1000);
+
   } else if (readyCount < 1 && countdownTimer) {
+
     clearInterval(countdownTimer);
     countdownTimer = null;
     broadcast({ type: 'countdownCancelled' });
