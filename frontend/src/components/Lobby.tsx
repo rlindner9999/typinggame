@@ -25,11 +25,11 @@ export function Lobby() {
   const threshold = Math.max(2, Math.ceil(players.length * 2 / 3));
   const needed = threshold - readyCount;
 
-  const hint = readyCount >= threshold
+
+  const hint = readyCount >= 1
     ? `${readyCount}/${players.length} ready — countdown starting!`
-    : needed > 0
-    ? `${readyCount}/${players.length} ready — need ${needed} more`
-    : 'Need at least 2 players ready to start';
+    : 'Ready up to start the race';
+
 
   const isCountingDown = countdownValue !== null && countdownValue > 0;
 

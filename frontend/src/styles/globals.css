@@ -436,6 +436,72 @@ body::before {
 .next-round { text-align: center; color: var(--muted); font-size: 0.88rem; margin-top: 1.5rem; }
 .next-round span { color: var(--accent); font-weight: 700; }
 
+/* Winner celebration */
+.winner-glow {
+  animation: winnerPulse 2s ease-in-out infinite;
+  text-shadow: 0 0 40px rgba(255, 215, 0, 0.6), 0 0 80px rgba(139, 92, 246, 0.3);
+}
+@keyframes winnerPulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}
+
+.winner-row {
+  border-color: rgba(255, 215, 0, 0.5) !important;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.06), rgba(109, 40, 217, 0.06)) !important;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+}
+
+.winner-badge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 100px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  background: linear-gradient(135deg, #ffd700, #f59e0b);
+  color: #1a1a1a;
+  vertical-align: middle;
+}
+
+.prize-won-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(0, 255, 136, 0.05));
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  animation: slideDown 0.5s ease;
+}
+.prize-won-icon { font-size: 2rem; }
+.prize-won-label { font-size: 0.7rem; color: var(--warn); text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; }
+.prize-won-amount { font-size: 1.1rem; font-weight: 700; color: var(--warn); font-family: var(--mono); margin-top: 0.15rem; }
+
+.my-stats-card {
+  display: flex;
+  align-items: stretch;
+  background: var(--surface);
+  border: 1px solid var(--border-bright);
+  border-radius: 12px;
+  margin-top: 1.25rem;
+  overflow: hidden;
+}
+.my-stats-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0.5rem;
+  gap: 0.2rem;
+}
+.my-stats-divider { width: 1px; background: var(--border); flex-shrink: 0; }
+.my-stats-val { font-size: 1.3rem; font-weight: 800; color: var(--accent); font-family: var(--mono); }
+.my-stats-lbl { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
 /* ── NOTIFICATIONS ── */
 .notifs { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200; display: flex; flex-direction: column; gap: 0.5rem; }
 .notif {
@@ -492,3 +558,163 @@ body::before {
 .stake-status.info { color: var(--muted); }
 
 hr.div { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+
+/* ── WPM CHART ── */
+.wpm-chart-wrap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem 1rem 0.5rem;
+  margin-bottom: 1.25rem;
+}
+.wpm-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+.wpm-chart-title {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  font-weight: 700;
+}
+.wpm-chart-stats {
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+.wpm-chart-stats strong {
+  color: var(--accent);
+  font-weight: 700;
+}
+.wpm-chart-svg {
+  width: 100%;
+  height: 60px;
+  display: block;
+}
+.wpm-chart-dot {
+  animation: chartDotPulse 1.5s ease-in-out infinite;
+}
+@keyframes chartDotPulse {
+  0%, 100% { r: 3; opacity: 1; }
+  50% { r: 5; opacity: 0.7; }
+}
+
+/* ── STREAK / ACCURACY ── */
+.streak-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  padding: 0.6rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  min-height: 48px;
+}
+.streak-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+}
+.streak-label {
+  font-size: 0.6rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.streak-accuracy {
+  font-size: 1.1rem;
+  font-weight: 800;
+  font-family: var(--mono);
+  color: var(--muted);
+  transition: color 0.2s;
+}
+.streak-accuracy.great { color: var(--accent); }
+.streak-accuracy.perfect { color: var(--success); text-shadow: 0 0 12px rgba(0, 255, 136, 0.5); }
+.streak-max {
+  font-size: 1.1rem;
+  font-weight: 800;
+  font-family: var(--mono);
+  color: var(--accent);
+}
+
+.streak-combo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  padding: 0.3rem 1rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+.streak-count {
+  font-size: 1.4rem;
+  font-weight: 900;
+  font-family: var(--mono);
+  line-height: 1;
+}
+.streak-combo-label {
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.streak-warm {
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+}
+.streak-warm .streak-count { color: var(--accent); }
+.streak-warm .streak-combo-label { color: var(--accent); }
+
+.streak-hot {
+  background: rgba(255, 215, 0, 0.08);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  animation: streakPulse 1s ease-in-out infinite;
+}
+.streak-hot .streak-count { color: var(--warn); text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+.streak-hot .streak-combo-label { color: var(--warn); }
+
+.streak-fire {
+  background: rgba(255, 51, 102, 0.1);
+  border: 1px solid rgba(255, 51, 102, 0.35);
+  animation: streakPulse 0.7s ease-in-out infinite;
+}
+.streak-fire .streak-count { color: var(--danger); text-shadow: 0 0 16px rgba(255, 51, 102, 0.6); }
+.streak-fire .streak-combo-label { color: var(--danger); }
+
+.streak-legendary {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(255, 215, 0, 0.1));
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  animation: streakPulse 0.5s ease-in-out infinite, legendaryShine 3s linear infinite;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+}
+.streak-legendary .streak-count {
+  background: linear-gradient(135deg, var(--primary-b), var(--warn));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: brightness(1.2);
+}
+.streak-legendary .streak-combo-label {
+  background: linear-gradient(135deg, var(--primary-b), var(--warn));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes streakPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+@keyframes legendaryShine {
+  0% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); }
+  33% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.25); }
+  66% { box-shadow: 0 0 25px rgba(0, 212, 255, 0.2); }
+  100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); }
+}
