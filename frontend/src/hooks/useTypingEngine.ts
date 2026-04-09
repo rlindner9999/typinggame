@@ -14,7 +14,7 @@ export function useTypingEngine(
   prompt: string,
   isRacing: boolean,
   sendProgress: (progress: number, wpm: number) => void,
-  sendFinished: (wpm: number) => void,
+  sendFinished: (wpm: number, text: string) => void,
 ) {
   const [typedText, setTypedText] = useState('');
   const [finished, setFinished] = useState(false);
@@ -81,7 +81,7 @@ export function useTypingEngine(
     // Check if done
     if (clamped.length === prompt.length && getCorrectLen(clamped) === prompt.length) {
       const w = getWpm(clamped);
-      sendFinished(w);
+      sendFinished(w, clamped);
       setFinished(true);
       if (progressIntervalRef.current) {
         clearInterval(progressIntervalRef.current);
