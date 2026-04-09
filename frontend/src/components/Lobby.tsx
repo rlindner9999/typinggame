@@ -23,11 +23,9 @@ export function Lobby() {
 
   const readyCount = players.filter((p) => p.ready).length;
 
-  const hint = readyCount >= 2
+  const hint = readyCount >= 1
     ? `${readyCount}/${players.length} ready — countdown starting!`
-    : readyCount === 1
-    ? `${readyCount}/${players.length} ready — need 1 more`
-    : 'Need at least 2 players ready to start';
+    : 'Ready up to start the race';
 
   const isCountingDown = countdownValue !== null && countdownValue > 0;
 

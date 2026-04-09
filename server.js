@@ -184,7 +184,7 @@ function checkCountdown() {
   if (gameState !== 'waiting') return;
   const readyCount = [...players.values()].filter(p => p.ready).length;
 
-  if (readyCount >= 2 && !countdownTimer) {
+  if (readyCount >= 1 && !countdownTimer) {
     countdownValue = 5;
     broadcast({ type: 'countdown', count: countdownValue });
     countdownTimer = setInterval(() => {
@@ -197,7 +197,7 @@ function checkCountdown() {
         broadcast({ type: 'countdown', count: countdownValue });
       }
     }, 1000);
-  } else if (readyCount < 2 && countdownTimer) {
+  } else if (readyCount < 1 && countdownTimer) {
     clearInterval(countdownTimer);
     countdownTimer = null;
     broadcast({ type: 'countdownCancelled' });
@@ -206,7 +206,7 @@ function checkCountdown() {
 
 async function startRace() {
   const racers = [...players.values()].filter(p => p.ready);
-  if (racers.length < 2) { gameState = 'waiting'; return; }
+  if (racers.length < 1) { gameState = 'waiting'; return; }
 
   gameState = 'racing';
   currentPrompt = PROMPTS[Math.floor(Math.random() * PROMPTS.length)];

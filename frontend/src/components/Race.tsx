@@ -4,6 +4,8 @@ import { useMemo, useEffect, useState, useCallback } from 'react';
 import { useGame } from '@/hooks/useGameState';
 import { useTypingEngine } from '@/hooks/useTypingEngine';
 import { RaceTrack } from './RaceTrack';
+import { WpmChart } from './WpmChart';
+import { StreakCounter } from './StreakCounter';
 import { medal, placeLabel } from '@/lib/constants';
 
 export function Race() {
@@ -30,6 +32,10 @@ export function Race() {
     focusInput,
     inputRef,
     raceStartRef,
+    wpmHistory,
+    streak,
+    maxStreak,
+    accuracy,
   } = useTypingEngine(prompt, isRacing, sendProgress, sendFinished);
 
   // Timer display
@@ -145,14 +151,22 @@ export function Race() {
         Click here or start typing to focus
       </div>
 
+      {!isSpectating && (
+        <StreakCounter streak={streak} maxStreak={maxStreak} accuracy={accuracy} />
+      )}
+
       {showFinishBanner && (
         <div className="finish-banner">
           <div className="emoji">{medal(myPlace!)}</div>
           <div className="finfo">
             <h3>You finished {placeLabel(myPlace!)}!</h3>
-            <p>{wpm} WPM · Waiting for others to finish...</p>
+            <p>{wpm} WPM · {accuracy}% accuracy · {maxStreak} best streak</p>
           </div>
         </div>
+      )}
+
+      {!isSpectating && wpmHistory.length > 0 && (
+        <WpmChart history={wpmHistory} currentWpm={wpm} />
       )}
 
       <div className="tracks-hdr">Racers</div>
