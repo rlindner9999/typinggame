@@ -75,20 +75,28 @@ export function useTypingEngine(
 
   const handleInput = useCallback((value: string) => {
     if (!isRacing || finished) return;
-    const clamped = value.slice(0, prompt.length);
-    setTypedText(clamped);
 
-    // Check if done
-    if (clamped.length === prompt.length && getCorrectLen(clamped) === prompt.length) {
-      const w = getWpm(clamped);
-      sendFinished(w, clamped);
-      setFinished(true);
-      if (progressIntervalRef.current) {
-        clearInterval(progressIntervalRef.current);
-        progressIntervalRef.current = null;
+    // Block on errors: only allow typing the next correct character
+    if (value.length > typedText.length) {
+      const newChar = value[typedText.length];
+      if (newChar !== prompt[typedText.length]) return;
+      const accepted = value.slice(0, typedText.length + 1);
+      setTypedText(accepted);
+
+      if (accepted.length === prompt.length) {
+        const w = getWpm(accepted);
+        sendFinished(w, accepted);
+        setFinished(true);
+        if (progressIntervalRef.current) {
+          clearInterval(progressIntervalRef.current);
+          progressIntervalRef.current = null;
+        }
       }
+    } else {
+      // Backspace — always allowed
+      setTypedText(value);
     }
-  }, [isRacing, finished, prompt, getCorrectLen, getWpm, sendFinished]);
+  }, [isRacing, finished, prompt, typedText, getWpm, sendFinished]);
 
   const focusInput = useCallback(() => {
     inputRef.current?.focus();
