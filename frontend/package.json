@@ -16,6 +16,9 @@
     "viem": "^2.21.0",
     "wagmi": "^2.14.0"
   },
+  "engines": {
+    "node": "20.x"
+  },
   "devDependencies": {
     "@types/node": "^20.14.0",
     "@types/react": "^18.3.3",
