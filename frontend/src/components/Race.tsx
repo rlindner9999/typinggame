@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useEffect, useState, useCallback } from 'react';
+import { useMemo, useEffect, useState, useCallback, useRef } from 'react';
 import { useGame } from '@/hooks/useGameState';
 import { useTypingEngine } from '@/hooks/useTypingEngine';
 import { RaceTrack } from './RaceTrack';
@@ -93,19 +93,48 @@ export function Race() {
   // Spectator mode (joined mid-race)
   const isSpectating = isRacing && me && !me.inGame;
 
-  // Render prompt with char-by-char coloring
-  const promptChars = useMemo(() => {
-    return prompt.split('').map((ch, i) => {
-      let cls = '';
-      if (i < typedText.length) {
-        cls = typedText[i] === ch ? 'c-correct' : 'c-wrong';
-      } else if (i === typedText.length) {
-        cls = 'c-cursor';
-      }
+  // Sliding window: scroll prompt box so cursor line stays visible
+  const promptBoxRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const box = promptBoxRef.current;
+    const cursor = cursorRef.current;
+    if (!box || !cursor) return;
+    const boxRect = box.getBoundingClientRect();
+    const cursorRect = cursor.getBoundingClientRect();
+    const cursorRelativeTop = cursorRect.top - boxRect.top + box.scrollTop;
+    const targetScroll = cursorRelativeTop - box.clientHeight / 3;
+    box.scrollTop = Math.max(0, targetScroll);
+  }, [typedText]);
+
+  // Render prompt grouped by words to prevent mid-word line breaks
+  const promptWords = useMemo(() => {
+    // Split into words + trailing spaces using regex
+    const tokens = prompt.match(/\S+\s*/g) || [];
+    let offset = 0;
+
+    return tokens.map((token, wi) => {
+      const startIndex = offset;
+      offset += token.length;
+
+      const spans = token.split('').map((ch, ci) => {
+        const i = startIndex + ci;
+        let cls = '';
+        if (i < typedText.length) {
+          cls = typedText[i] === ch ? 'c-correct' : 'c-wrong';
+        } else if (i === typedText.length) {
+          cls = 'c-cursor';
+        }
+        return (
+          <span key={i} className={cls} ref={i === typedText.length ? cursorRef : undefined}>
+            {ch === ' ' ? '\u00A0' : ch}
+          </span>
+        );
+      });
+
       return (
-        <span key={i} className={cls}>
-          {ch === ' ' ? '\u00A0' : ch}
-        </span>
+        <span key={wi} style={{ whiteSpace: 'nowrap' }}>{spans}</span>
       );
     });
   }, [prompt, typedText]);
@@ -124,11 +153,11 @@ export function Race() {
         </div>
       </div>
 
-      <div className="prompt-box" onClick={focusInput}>
+      <div className="prompt-box" ref={promptBoxRef} onClick={focusInput}>
         {isSpectating ? (
           <span style={{ color: 'var(--muted)' }}>Race in progress — watch the leaderboard!</span>
         ) : (
-          promptChars
+          promptWords
         )}
       </div>
 
