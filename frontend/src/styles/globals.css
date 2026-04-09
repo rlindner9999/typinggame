@@ -247,7 +247,8 @@ body::before {
   align-items: center;
   margin-bottom: 1.5rem;
 }
-.stat { text-align: center; }
+.stat { text-align: center; flex: 1; }
+.race-label { flex: 0 0 auto; }
 .stat-val { font-size: 1.9rem; font-weight: 900; color: var(--accent); font-family: var(--mono); line-height: 1; }
 .stat-lbl { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.2rem; }
 .race-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.25em; text-transform: uppercase; }
@@ -263,13 +264,14 @@ body::before {
   user-select: none;
   cursor: text;
   margin-bottom: 0.6rem;
-  min-height: 120px;
-  white-space: pre-wrap;
-  word-break: break-word;
+  height: 8em;
+  overflow: hidden;
+  white-space: normal;
+  word-break: normal;
   overflow-wrap: break-word;
 }
 
-.c-correct { color: var(--success); }
+.c-correct { color: #58a6ff; }
 .c-wrong { color: var(--danger); background: rgba(255, 51, 102, 0.18); border-radius: 2px; }
 .c-cursor {
   background: var(--primary-b);
