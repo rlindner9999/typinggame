@@ -1,0 +1,22 @@
+{
+  "name": "typeracer-battle-royale",
+  "version": "1.0.0",
+  "description": "Multiplayer typing racing battle royale",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "compile": "npx hardhat compile",
+    "deploy:baseSepolia": "npx hardhat run scripts/deploy.js --network baseSepolia"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ethers": "^6.11.1",
+    "express": "^4.18.2",
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/contracts": "^5.0.2",
+    "hardhat": "^2.22.3"
+  }
+}
