@@ -86,8 +86,6 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       let screen: GameScreen = 'lobby';
       if (gs === 'racing') {
         screen = 'race';
-      } else if (stakingEnabled && hasWallet && gs === 'waiting') {
-        screen = 'join'; // stay on join for staking
       }
       return {
         ...state,
@@ -100,7 +98,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         players,
         prompt: prompt || '',
         screen,
-        pendingStake: stakingEnabled && hasWallet && gs === 'waiting' && !gameId,
+        pendingStake: false,
       };
     }
 

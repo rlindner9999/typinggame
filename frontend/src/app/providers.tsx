@@ -3,13 +3,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider, createConfig, http } from 'wagmi';
 import { baseSepolia } from 'wagmi/chains';
-import { coinbaseWallet, injected } from 'wagmi/connectors';
+import { coinbaseWallet } from 'wagmi/connectors';
 import { type ReactNode, useState } from 'react';
 
 const wagmiConfig = createConfig({
   chains: [baseSepolia],
   connectors: [
-    injected(),
     coinbaseWallet({ appName: 'TypeRacer Battle Royale' }),
   ],
   transports: {
