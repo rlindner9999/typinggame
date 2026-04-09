@@ -17,7 +17,7 @@ export function Race() {
     [send],
   );
   const sendFinished = useCallback(
-    (wpm: number) => send({ type: 'finished', wpm }),
+    (wpm: number, text: string) => send({ type: 'finished', wpm, text }),
     [send],
   );
 

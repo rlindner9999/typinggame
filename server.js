@@ -245,9 +245,11 @@ function endRace(winnerPlayer) {
 
   broadcast({ type: 'results', results });
 
-  // Declare winner on-chain
+  // Declare winner on-chain, or cancel/refund if no valid winner
   if (winnerPlayer?.wallet && currentGameId !== null) {
     onChainDeclareWinner(currentGameId, winnerPlayer.wallet);
+  } else if (currentGameId !== null) {
+    onChainCancelGame(currentGameId);
   }
   currentGameId = null;
 
@@ -364,9 +366,21 @@ wss.on('connection', (ws) => {
 
       case 'finished': {
         if (!player || gameState !== 'racing' || !player.inGame || player.finished) break;
+
+        // Verify the player actually typed the full prompt
+        const typedText = String(msg.text ?? '');
+        if (typedText !== currentPrompt) break;
+
+        // Compute server-side WPM and reject impossibly fast finishes (>300 WPM)
+        const elapsedMs = Date.now() - raceStartTime;
+        const wordCount = currentPrompt.split(/\s+/).length;
+        const elapsedMin = elapsedMs / 60000;
+        const serverWpm = elapsedMin > 0 ? Math.round(wordCount / elapsedMin) : Infinity;
+        if (serverWpm > 300) break;
+
         player.finished = true;
         player.progress = 100;
-        player.wpm = Math.max(0, Number(msg.wpm) || 0);
+        player.wpm = serverWpm;
         player.place = ++finishPlace;
         broadcast({ type: 'playerFinished', players: getSnapshot(), id: player.id, name: player.name, place: player.place, wpm: player.wpm });
         endRace(player);
